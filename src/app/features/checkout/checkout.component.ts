@@ -1,0 +1,458 @@
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { CartService } from '../../core/services/cart.service';
+import { AuthService } from '../../core/services/auth.service';
+
+@Component({
+  selector: 'app-checkout',
+  standalone: true,
+  imports: [RouterLink, ReactiveFormsModule],
+  template: `
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Checkout Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Checkout</h1>
+        <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <a routerLink="/cart" class="hover:text-primary-600 transition-colors">Cart</a>
+          <span>→</span>
+          <span class="text-primary-600 font-medium">Checkout</span>
+          <span>→</span>
+          <span class="text-gray-400">Confirmation</span>
+        </div>
+      </div>
+
+      @if (cartService.items().length > 0) {
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Checkout Form -->
+          <div class="lg:col-span-2 space-y-8">
+            <!-- Shipping Information -->
+            <div class="card p-6">
+              <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                Shipping Information
+              </h2>
+
+              <form [formGroup]="shippingForm" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name *</label>
+                    <input type="text" formControlName="firstName" class="input-field" placeholder="John">
+                    @if (shippingForm.get('firstName')?.invalid && shippingForm.get('firstName')?.touched) {
+                      <p class="text-red-500 text-xs mt-1">First name is required</p>
+                    }
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name *</label>
+                    <input type="text" formControlName="lastName" class="input-field" placeholder="Doe">
+                    @if (shippingForm.get('lastName')?.invalid && shippingForm.get('lastName')?.touched) {
+                      <p class="text-red-500 text-xs mt-1">Last name is required</p>
+                    }
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email *</label>
+                  <input type="email" formControlName="email" class="input-field" placeholder="you@example.com">
+                  @if (shippingForm.get('email')?.invalid && shippingForm.get('email')?.touched) {
+                    <p class="text-red-500 text-xs mt-1">Valid email is required</p>
+                  }
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone *</label>
+                  <input type="tel" formControlName="phone" class="input-field" placeholder="+1 (555) 000-0000">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Address *</label>
+                  <input type="text" formControlName="address" class="input-field" placeholder="123 Main Street">
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Apartment, suite, etc. (optional)</label>
+                  <input type="text" formControlName="apartment" class="input-field" placeholder="Apartment or suite">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">City *</label>
+                    <input type="text" formControlName="city" class="input-field" placeholder="New York">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">State *</label>
+                    <select formControlName="state" class="input-field">
+                      <option value="">Select state</option>
+                      <option value="NY">New York</option>
+                      <option value="CA">California</option>
+                      <option value="TX">Texas</option>
+                      <option value="FL">Florida</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">ZIP Code *</label>
+                    <input type="text" formControlName="zipCode" class="input-field" placeholder="10001">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Country *</label>
+                  <select formControlName="country" class="input-field">
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+
+            <!-- Shipping Method -->
+            <div class="card p-6">
+              <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                Shipping Method
+              </h2>
+
+              <div class="space-y-3">
+                @for (method of shippingMethods; track method.id) {
+                  <label class="flex items-center justify-between p-4 border-2 rounded-xl cursor-pointer transition-all"
+                         [class.border-primary-500]="selectedShipping() === method.id"
+                         [class.bg-primary-50]="selectedShipping() === method.id"
+                         [class.border-gray-200]="selectedShipping() !== method.id"
+                         [class.dark:border-gray-700]="selectedShipping() !== method.id">
+                    <div class="flex items-center gap-3">
+                      <input type="radio" 
+                             [value]="method.id" 
+                             [checked]="selectedShipping() === method.id"
+                             (change)="selectedShipping.set(method.id)"
+                             class="text-primary-600 focus:ring-primary-500">
+                      <div>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ method.name }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ method.description }}</p>
+                      </div>
+                    </div>
+                    <span class="font-semibold text-gray-900 dark:text-white">
+                      {{ method.price === 0 ? 'Free' : '$' + method.price.toFixed(2) }}
+                    </span>
+                  </label>
+                }
+              </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="card p-6">
+              <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                Payment Method
+              </h2>
+
+              <div class="space-y-3">
+                @for (method of paymentMethods; track method.id) {
+                  <label class="flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-all"
+                         [class.border-primary-500]="selectedPayment() === method.id"
+                         [class.bg-primary-50]="selectedPayment() === method.id"
+                         [class.border-gray-200]="selectedPayment() !== method.id"
+                         [class.dark:border-gray-700]="selectedPayment() !== method.id">
+                    <input type="radio" 
+                           [value]="method.id" 
+                           [checked]="selectedPayment() === method.id"
+                           (change)="selectedPayment.set(method.id)"
+                           class="text-primary-600 focus:ring-primary-500">
+                    <div class="flex items-center gap-3">
+                      <span class="text-2xl">{{ method.icon }}</span>
+                      <div>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ method.name }}</p>
+                        @if (method.id === 'card') {
+                          <p class="text-sm text-gray-500 dark:text-gray-400">**** **** **** 4242</p>
+                        }
+                      </div>
+                    </div>
+                  </label>
+                }
+              </div>
+
+              <!-- Credit Card Form (if selected) -->
+              @if (selectedPayment() === 'card') {
+                <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Card Number</label>
+                    <input type="text" class="input-field" placeholder="1234 5678 9012 3456">
+                  </div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expiry Date</label>
+                      <input type="text" class="input-field" placeholder="MM/YY">
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CVC</label>
+                      <input type="text" class="input-field" placeholder="123">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name on Card</label>
+                    <input type="text" class="input-field" placeholder="John Doe">
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="lg:col-span-1">
+            <div class="card p-6 sticky top-24">
+              <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Order Summary</h2>
+              
+              <!-- Cart Items -->
+              <div class="space-y-4 mb-6">
+                @for (item of cartService.items(); track item.productId) {
+                  <div class="flex items-center gap-3">
+                    <img [src]="item.image" [alt]="item.name" 
+                         class="w-16 h-16 object-cover rounded-lg">
+                    <div class="flex-1 min-w-0">
+                      <p class="font-medium text-gray-900 dark:text-white truncate">{{ item.name }}</p>
+                      @if (item.variant) {
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ item.variant }}</p>
+                      }
+                      <p class="text-sm text-gray-500 dark:text-gray-400">Qty: {{ item.quantity }}</p>
+                    </div>
+                    <span class="font-semibold text-gray-900 dark:text-white">
+                      \${{ (item.price * item.quantity).toFixed(2) }}
+                    </span>
+                  </div>
+                }
+              </div>
+
+              <!-- Price Breakdown -->
+              <div class="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-3">
+                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                  <span>Subtotal</span>
+                  <span>\${{ cartService.subtotal().toFixed(2) }}</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                  <span>Shipping</span>
+                  <span>{{ shippingCost() === 0 ? 'Free' : '$' + shippingCost().toFixed(2) }}</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                  <span>Tax (10%)</span>
+                  <span>\${{ cartService.tax().toFixed(2) }}</span>
+                </div>
+                
+                @if (promoCode()) {
+                  <div class="flex justify-between text-sm text-green-600">
+                    <span>Discount ({{ promoCode() }})</span>
+                    <span>-\${{ discount().toFixed(2) }}</span>
+                  </div>
+                }
+
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
+                  <div class="flex justify-between text-lg font-bold text-gray-900 dark:text-white">
+                    <span>Total</span>
+                    <span>\${{ orderTotal().toFixed(2) }}</span>
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Including tax</p>
+                </div>
+              </div>
+
+              <!-- Promo Code -->
+              <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Promo Code</label>
+                <div class="flex gap-2">
+                  <input type="text" 
+                         //[(ngModel)]="promoCodeInput" 
+                         class="input-field flex-1" 
+                         placeholder="Enter code">
+                  <button (click)="applyPromoCode()" 
+                          class="btn-secondary whitespace-nowrap"
+                          [disabled]="!promoCodeInput() || promoApplied()">
+                    {{ promoApplied() ? 'Applied ✓' : 'Apply' }}
+                  </button>
+                </div>
+                @if (promoCode()) {
+                  <button (click)="removePromoCode()" 
+                          class="text-sm text-red-500 hover:text-red-600 mt-2">
+                    Remove code
+                  </button>
+                }
+              </div>
+
+              <!-- Place Order Button -->
+              <button (click)="placeOrder()" 
+                      class="btn-primary w-full mt-6 text-lg py-4"
+                      [disabled]="shippingForm.invalid || isProcessing()">
+                @if (isProcessing()) {
+                  <span class="flex items-center justify-center gap-2">
+                    <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Processing...
+                  </span>
+                } @else {
+                  Place Order - \${{ orderTotal().toFixed(2) }}
+                }
+              </button>
+
+              <!-- Secure Checkout Notice -->
+              <div class="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500 dark:text-gray-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                Secure 256-bit SSL encrypted checkout
+              </div>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <!-- Empty Cart State -->
+        <div class="text-center py-16">
+          <div class="text-6xl mb-4">🛒</div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Your cart is empty</h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-8">Add some items to your cart before checking out.</p>
+          <a routerLink="/products" class="btn-primary px-8 py-3">
+            Start Shopping
+          </a>
+        </div>
+      }
+
+      <!-- Success Modal -->
+      @if (showSuccessModal()) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center">
+          <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" (click)="showSuccessModal.set(false)"></div>
+          <div class="relative bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 animate-scale shadow-2xl">
+            <div class="text-center">
+              <div class="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Order Placed Successfully!</h2>
+              <p class="text-gray-600 dark:text-gray-400 mb-2">Order #ORD-{{ orderNumber() }}</p>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">
+                Thank you for your purchase! You'll receive a confirmation email shortly.
+              </p>
+              <div class="flex gap-4">
+                <a routerLink="/dashboard/orders" 
+                   class="btn-primary flex-1" 
+                   (click)="showSuccessModal.set(false)">
+                  Track Order
+                </a>
+                <a routerLink="/products" 
+                   class="btn-secondary flex-1" 
+                   (click)="showSuccessModal.set(false)">
+                  Continue Shopping
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  `
+})
+export class CheckoutComponent {
+  private fb = inject(FormBuilder);
+  cartService = inject(CartService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  shippingForm: FormGroup;
+  
+  selectedShipping = signal<string>('standard');
+  selectedPayment = signal<string>('card');
+  promoCodeInput = signal('');
+  promoCode = signal('');
+  promoApplied = signal(false);
+  isProcessing = signal(false);
+  showSuccessModal = signal(false);
+  orderNumber = signal('');
+
+  shippingMethods = [
+    { id: 'standard', name: 'Standard Shipping', description: '5-7 business days', price: 0 },
+    { id: 'express', name: 'Express Shipping', description: '2-3 business days', price: 15 },
+    { id: 'overnight', name: 'Overnight Shipping', description: 'Next business day', price: 29.99 }
+  ];
+
+  paymentMethods = [
+    { id: 'card', name: 'Credit Card', icon: '💳' },
+    { id: 'paypal', name: 'PayPal', icon: '🅿️' },
+    { id: 'apple', name: 'Apple Pay', icon: '🍎' }
+  ];
+
+  constructor() {
+    this.shippingForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', Validators.required],
+      address: ['', Validators.required],
+      apartment: [''],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      zipCode: ['', Validators.required],
+      country: ['US', Validators.required]
+    });
+
+    // Pre-fill with user data if logged in
+    const user = this.authService.user();
+    if (user) {
+      this.shippingForm.patchValue({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone
+      });
+    }
+  }
+
+  shippingCost = () => {
+    const method = this.shippingMethods.find(m => m.id === this.selectedShipping());
+    return method ? method.price : 0;
+  };
+
+  discount = () => {
+    if (this.promoCode() === 'SAVE10') return this.cartService.subtotal() * 0.1;
+    if (this.promoCode() === 'SAVE20') return this.cartService.subtotal() * 0.2;
+    return 0;
+  };
+
+  orderTotal = () => {
+    return this.cartService.total() + this.shippingCost() - this.discount();
+  };
+
+  applyPromoCode(): void {
+    const code = this.promoCodeInput().toUpperCase();
+    if (code === 'SAVE10' || code === 'SAVE20') {
+      this.promoCode.set(code);
+      this.promoApplied.set(true);
+    }
+  }
+
+  removePromoCode(): void {
+    this.promoCode.set('');
+    this.promoApplied.set(false);
+    this.promoCodeInput.set('');
+  }
+
+  placeOrder(): void {
+    if (this.shippingForm.invalid) {
+      // Mark all fields as touched to show validation errors
+      Object.keys(this.shippingForm.controls).forEach(key => {
+        this.shippingForm.get(key)?.markAsTouched();
+      });
+      return;
+    }
+
+    this.isProcessing.set(true);
+
+    // Simulate API call
+    setTimeout(() => {
+      // Generate random order number
+      this.orderNumber.set(Math.floor(Math.random() * 90000 + 10000).toString());
+      
+      // Clear cart
+      this.cartService.clearCart();
+      
+      // Show success
+      this.isProcessing.set(false);
+      this.showSuccessModal.set(true);
+    }, 2000);
+  }
+}

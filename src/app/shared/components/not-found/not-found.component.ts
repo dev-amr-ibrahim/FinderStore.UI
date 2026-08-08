@@ -1,0 +1,23 @@
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
+@Component({
+  selector: 'app-not-found',
+  standalone: true,
+  imports: [RouterLink],
+  template: `
+    <div class="min-h-screen flex items-center justify-center px-4">
+      <div class="text-center">
+        <h1 class="text-9xl font-bold text-primary-600 mb-4">404</h1>
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Page Not Found</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+          The page you're looking for doesn't exist or has been moved.
+        </p>
+        <a routerLink="/" class="btn-primary px-8 py-3">
+          Back to Home
+        </a>
+      </div>
+    </div>
+  `
+})
+export class NotFoundComponent {}

@@ -1,0 +1,8 @@
+@if (loadingService.isLoading()) {
+  <div class="fixed inset-0 z-[100] flex items-center justify-center bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+    <div class="flex flex-col items-center gap-4">
+      <div class="spinner"></div>
+      <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">Loading...</p>
+    </div>
+  </div>
+}

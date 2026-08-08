@@ -1,0 +1,35 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">My Wishlist</h1>
+
+  @if (wishlistItems().length > 0) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      @for (product of wishlistItems(); track product.id) {
+        <div class="card group">
+          <div class="relative">
+            <img [src]="product.images[0]?.url" [alt]="product.name"
+                 class="w-full h-64 object-cover rounded-t-2xl">
+            <button (click)="removeFromWishlist(product.id)"
+                    class="absolute top-4 right-4 w-10 h-10 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+              <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{{ product.name }}</h3>
+            <span class="text-xl font-bold text-primary-600 dark:text-primary-400">${{ product.price }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="text-center py-16">
+      <div class="text-6xl mb-4">❤️</div>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Your wishlist is empty</h2>
+      <p class="text-gray-600 dark:text-gray-400 mb-8">Save items you love for later.</p>
+      <a routerLink="/products" class="btn-primary px-8 py-3">
+        Discover Products
+      </a>
+    </div>
+  }
+</div>

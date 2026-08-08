@@ -1,0 +1,23 @@
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-auth-layout',
+  standalone: true,
+  imports: [RouterOutlet],
+  template: `
+    <div class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center px-4 py-12">
+      <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+          <a href="/" class="text-4xl font-display font-bold text-primary-600 dark:text-primary-400">
+            LUXE
+          </a>
+        </div>
+        <div class="glass-card p-8">
+          <router-outlet />
+        </div>
+      </div>
+    </div>
+  `
+})
+export class AuthLayoutComponent {}

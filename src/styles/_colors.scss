@@ -1,0 +1,24 @@
+// Luxury Brand Colors
+$luxury-gold: #f9a726;
+$luxury-gold-light: #fbbf24;
+$luxury-gold-dark: #ea580c;
+$luxury-cream: #fef3c7;
+$luxury-bronze: #cd7f32;
+$luxury-warm: #f59e0b;
+
+// Gradients
+$gradient-gold: linear-gradient(135deg, #f9a726 0%, #fbbf24 100%);
+$gradient-luxury: linear-gradient(135deg, #f9a726 0%, #fbbf24 50%, #fef3c7 100%);
+$gradient-dark: linear-gradient(135deg, #92400e 0%, #f9a726 100%);
+
+// Shadows
+$shadow-gold: 0 4px 14px 0 rgba(249, 167, 38, 0.25);
+$shadow-gold-hover: 0 6px 20px 0 rgba(249, 167, 38, 0.4);
+
+// استخدام الألوان في CSS
+:root {
+  --luxury-gold: #{$luxury-gold};
+  --luxury-gold-light: #{$luxury-gold-light};
+  --luxury-gold-dark: #{$luxury-gold-dark};
+  --luxury-cream: #{$luxury-cream};
+}

@@ -1,0 +1,61 @@
+import { Component, signal, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { ProductService } from '../../../core/services/product.service';
+import { Category } from '../../../core/interfaces/product.interface';
+
+@Component({
+  selector: 'app-mega-menu',
+  standalone: true,
+  imports: [RouterLink],
+  template: `
+    <div class="relative" (mouseenter)="show()" (mouseleave)="hide()">
+      <button class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center gap-1">
+        Categories
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+
+      @if (isOpen()) {
+        <div class="absolute top-full left-0 mt-2 w-[600px] glass-card p-6 animate-scale z-50">
+          <div class="grid grid-cols-3 gap-6">
+            @for (category of categories; track category.id) {
+              <a [routerLink]="['/categories', category.id]"
+                 class="group block p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <div class="w-full h-32 rounded-lg overflow-hidden mb-3">
+                  <img [src]="category.image" [alt]="category.name"
+                       class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                </div>
+                <h4 class="font-medium text-gray-900 dark:text-white text-center">{{ category.name }}</h4>
+              </a>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  `,
+  styles: [`
+    :host {
+      display: block;
+    }
+  `]
+})
+export class MegaMenuComponent {
+  private productService = inject(ProductService);
+  isOpen = signal(false);
+  categories: Category[] = [];
+
+  constructor() {
+    this.productService.getCategories().subscribe(cats => {
+      this.categories = cats;
+    });
+  }
+
+  show(): void {
+    this.isOpen.set(true);
+  }
+
+  hide(): void {
+    this.isOpen.set(false);
+  }
+}

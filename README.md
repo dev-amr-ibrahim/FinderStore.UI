@@ -1,59 +1,47 @@
-# FinderStore
+# LUXE Commerce - Angular 20 Ecommerce Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.2.
+A premium, production-ready ecommerce application built with Angular 20, inspired by Shopify's design excellence.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- 🎨 **Apple-Inspired Design**: Clean, minimal, luxury aesthetic
+- 🌓 **Dark/Light Mode**: Full theme support with system preference detection
+- 🌍 **Internationalization**: English and Arabic support with RTL/LTR
+- 📱 **Responsive**: Mobile-first design approach
+- 🔍 **Advanced Search**: Real-time search with modal interface
+- 🛒 **Shopping Cart**: Reactive cart with Signals
+- ❤️ **Wishlist**: Save favorite items
+- 👤 **User Dashboard**: Order tracking, profile management
+- 🎭 **Animations**: Smooth transitions and micro-interactions
+- 🔐 **Authentication**: JWT-based auth with guards
+- 🎯 **Performance**: Lazy loading, OnPush change detection
+- 📦 **Enterprise Architecture**: Clean Architecture, SOLID principles
 
-```bash
-ng serve
-```
+## Tech Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Angular 20** with Standalone Components
+- **TypeScript** with strict mode
+- **Tailwind CSS** for styling
+- **SCSS** for custom styles
+- **Angular Signals** for state management
+- **RxJS** for reactive programming
+- **Angular CDK** for advanced UI patterns
+- **Angular Animations** for smooth transitions
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Quick Start
 
 ```bash
-ng test
-```
+# Clone the repository
+git clone <repository-url>
 
-## Running end-to-end tests
+# Navigate to project
+cd luxe-commerce
 
-For end-to-end (e2e) testing, run:
+# Install dependencies
+npm install
 
-```bash
-ng e2e
-```
+# Start development server
+npm start
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# Open browser
+http://localhost:4200

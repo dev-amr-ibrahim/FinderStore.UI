@@ -1,0 +1,50 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+      @if (categoryId()) {
+        {{ categoryName() }}
+      } @else {
+        All Products
+      }
+    </h1>
+    <p class="text-gray-600 dark:text-gray-400">
+      {{ products().length }} products found
+    </p>
+  </div>
+
+  <!-- Filters Bar -->
+  <div class="flex flex-wrap items-center gap-4 mb-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+    <select class="input-field w-auto" (change)="sortProducts($event)">
+      <option value="newest">Newest</option>
+      <option value="price-low">Price: Low to High</option>
+      <option value="price-high">Price: High to Low</option>
+      <option value="rating">Highest Rated</option>
+    </select>
+    
+    <select class="input-field w-auto" (change)="filterByCategory($event)">
+      <option value="">All Categories</option>
+      <option value="1">Electronics</option>
+      <option value="2">Fashion</option>
+      <option value="3">Home & Living</option>
+      <option value="4">Beauty</option>
+      <option value="5">Sports</option>
+      <option value="6">Books</option>
+    </select>
+  </div>
+
+  <!-- Products Grid -->
+  @if (products().length > 0) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      @for (product of products(); track product.id) {
+        <app-product-card [product]="product" />
+      }
+    </div>
+  } @else {
+    <div class="text-center py-16">
+      <div class="text-6xl mb-4">📦</div>
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Products Found</h3>
+      <p class="text-gray-600 dark:text-gray-400">Try adjusting your filters or search criteria.</p>
+    </div>
+  }
+</div>

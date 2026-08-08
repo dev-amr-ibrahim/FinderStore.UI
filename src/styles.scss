@@ -1,1 +1,242 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --color-primary: #f9a726;
+    --color-primary-dark: #ea580c;
+    --color-primary-light: #fdba74;
+    --color-gold: #f9a726;
+    --color-cream: #fef3c7;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* RTL Support */
+  [dir="rtl"] {
+    .space-x-4 > :not([hidden]) ~ :not([hidden]),
+    .space-x-8 > :not([hidden]) ~ :not([hidden]) {
+      --tw-space-x-reverse: 1;
+    }
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary-300 dark:bg-primary-700 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary-400 dark:bg-primary-600;
+  }
+
+  /* Selection Color */
+  ::selection {
+    background: rgba(249, 167, 38, 0.2);
+    color: #92400e;
+  }
+
+  .dark ::selection {
+    background: rgba(249, 167, 38, 0.3);
+    color: #fbbf24;
+  }
+}
+
+@layer components {
+  /* Glassmorphism */
+  .glass {
+    @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-primary-100/50 dark:border-primary-900/30;
+  }
+
+  .glass-card {
+    @apply bg-white/60 dark:bg-gray-800/60 backdrop-blur-lg rounded-2xl border border-primary-100/50 dark:border-primary-900/30 shadow-lg shadow-primary-100/20 dark:shadow-primary-900/20;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-medium rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-primary-500/25 hover:shadow-primary-600/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-primary-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium rounded-full transition-all duration-200 border border-gray-200 dark:border-gray-700;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-3 border-2 border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-500 hover:text-white font-medium rounded-full transition-all duration-200;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-6 py-3 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 font-medium rounded-full transition-all duration-200;
+  }
+
+  /* Input Fields */
+  .input-field {
+    @apply w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all duration-200 dark:text-white placeholder-gray-400 dark:placeholder-gray-500;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50 hover:shadow-xl hover:shadow-primary-100/30 dark:hover:shadow-primary-900/20 transition-all duration-300 border border-gray-100 dark:border-gray-700;
+  }
+
+  .card-hover {
+    @apply card hover:-translate-y-1 hover:border-primary-200 dark:hover:border-primary-800;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .badge-primary {
+    @apply badge bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400;
+  }
+
+  .badge-success {
+    @apply badge bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400;
+  }
+
+  /* Links */
+  .link {
+    @apply text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors font-medium;
+  }
+
+  /* Animations */
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1;
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(249, 167, 38, 0.1);
+    border-radius: 50%;
+    border-top-color: #f9a726;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .dark .spinner {
+    border-color: rgba(249, 167, 38, 0.2);
+    border-top-color: #fbbf24;
+  }
+
+  /* Skeleton Loading */
+  .skeleton {
+    @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+    background: linear-gradient(90deg, #e5e7eb 25%, #f9a72630 50%, #e5e7eb 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* Gradient Text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent;
+  }
+
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-primary-400 via-primary-500 to-accent-500 bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-luxury-gradient {
+    background: linear-gradient(135deg, #f9a726 0%, #fbbf24 50%, #fef3c7 100%);
+  }
+
+  .bg-luxury-gradient-dark {
+    background: linear-gradient(135deg, #92400e 0%, #f9a726 50%, #fbbf24 100%);
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Toast Animations */
+.toast-enter {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.toast-exit {
+  animation: fadeOut 0.3s ease-in;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(100%); }
+}
+
+/* Focus styles */
+*:focus-visible {
+  @apply outline-2 outline-primary-500 outline-offset-2;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Product Card Special Effect */
+.product-card-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(249, 167, 38, 0.1) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+}
+
+.product-card-shine:hover::after {
+  left: 100%;
+}

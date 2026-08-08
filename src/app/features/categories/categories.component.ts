@@ -1,0 +1,49 @@
+import { Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { ProductService } from '../../core/services/product.service';
+import { Category } from '../../core/interfaces/product.interface';
+
+@Component({
+  selector: 'app-categories',
+  standalone: true,
+  imports: [RouterLink],
+  template: `
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          Shop by Category
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-400">
+          Discover our curated collection of premium categories
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (category of categories(); track category.id) {
+          <a [routerLink]="['/categories', category.id]"
+             class="group card overflow-hidden hover-lift">
+            <div class="relative h-64 overflow-hidden">
+              <img [src]="category.image" [alt]="category.name"
+                   class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-6">
+                <h2 class="text-2xl font-bold text-white mb-2">{{ category.name }}</h2>
+                <p class="text-white/80 text-sm">{{ category.description }}</p>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  `
+})
+export class CategoriesComponent {
+  private productService = inject(ProductService);
+  categories = signal<Category[]>([]);
+
+  constructor() {
+    this.productService.getCategories().subscribe(categories => {
+      this.categories.set(categories);
+    });
+  }
+}
