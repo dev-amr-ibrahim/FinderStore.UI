@@ -44,6 +44,18 @@ export class NavbarComponent {
     this.isScrolled.set(window.scrollY > 0);
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.searchOpen()) {
+      return;
+    }
+
+    const target = event.target as HTMLElement | null;
+    if (!target?.closest('app-search, [data-search-trigger]')) {
+      this.searchOpen.set(false);
+    }
+  }
+
   toggleMobileMenu(): void {
     this.mobileMenuOpen.update(v => !v);
   }

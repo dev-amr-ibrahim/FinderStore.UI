@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { ProductService } from '../../core/services/product.service';
@@ -10,7 +10,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
   standalone: true,
   imports: [FormsModule, ProductCardComponent],
   template: `
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" (click)="onSearchAreaClick($event)">
       <!-- Search Input -->
       <div class="max-w-2xl mx-auto mb-8">
         <div class="relative">
@@ -60,6 +60,7 @@ export class SearchComponent {
   
   searchQuery = signal('');
   results = signal<Product[]>([]);
+  close = output<void>();
 
   constructor() {
     this.searchSubject.pipe(
@@ -79,5 +80,12 @@ export class SearchComponent {
   onSearch(query: string): void {
     this.searchQuery.set(query);
     this.searchSubject.next(query);
+  }
+
+  onSearchAreaClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest('a[href]')) {
+      this.close.emit();
+    }
   }
 }

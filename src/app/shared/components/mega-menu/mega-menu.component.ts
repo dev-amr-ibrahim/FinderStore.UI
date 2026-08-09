@@ -17,8 +17,9 @@ import { Category } from '../../../core/interfaces/product.interface';
       </button>
 
       @if (isOpen()) {
-        <div class="absolute top-full left-0 mt-2 w-[600px] glass-card p-6 animate-scale z-50">
-          <div class="grid grid-cols-3 gap-6">
+        <div class="absolute top-full left-0 w-[600px] pt-2 z-50">
+          <div class="glass-card p-6 animate-scale">
+            <div class="grid grid-cols-3 gap-6">
             @for (category of categories; track category.id) {
               <a [routerLink]="['/categories', category.id]"
                  class="group block p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
@@ -29,6 +30,7 @@ import { Category } from '../../../core/interfaces/product.interface';
                 <h4 class="font-medium text-gray-900 dark:text-white text-center">{{ category.name }}</h4>
               </a>
             }
+            </div>
           </div>
         </div>
       }
