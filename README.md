@@ -1,6 +1,6 @@
-# LUXE Commerce - Angular 20 Ecommerce Application
+# Finder Store - Angular 20 Ecommerce Application
 
-A premium, production-ready ecommerce application built with Angular 20, inspired by Shopify's design excellence.
+A premium, production-ready ecommerce application built with Angular 20
 
 ## Features
 
@@ -35,7 +35,7 @@ A premium, production-ready ecommerce application built with Angular 20, inspire
 git clone <repository-url>
 
 # Navigate to project
-cd luxe-commerce
+cd finder-store
 
 # Install dependencies
 npm install
