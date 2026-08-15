@@ -43,8 +43,71 @@ export const routes: Routes = [
         canActivate: [authGuard]
       },
       {
+        path: 'profile',
+        loadComponent: () => import('./features/account/profile/profile.component').then(m => m.ProfileComponent),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./features/account/settings/settings.component').then(m => m.SettingsComponent),
+        canActivate: [authGuard]
+      },
+      {
         path: 'search',
         loadComponent: () => import('./features/search/search.component').then(m => m.SearchComponent)
+      },
+      {
+        path: 'about',
+        loadComponent: () => import('./features/information/about.component').then(m => m.AboutComponent)
+      },
+      {
+        path: 'contact',
+        loadComponent: () => import('./features/information/contact.component').then(m => m.ContactComponent)
+      },
+      {
+        path: 'careers',
+        loadComponent: () => import('./features/information/information-page.component').then(m => m.InformationPageComponent),
+        data: { page: 'careers' }
+      },
+      {
+        path: 'press',
+        loadComponent: () => import('./features/information/information-page.component').then(m => m.InformationPageComponent),
+        data: { page: 'press' }
+      },
+      {
+        path: 'help-center',
+        loadComponent: () => import('./features/information/information-page.component').then(m => m.InformationPageComponent),
+        data: { page: 'help-center' }
+      },
+      {
+        path: 'shipping-info',
+        loadComponent: () => import('./features/information/information-page.component').then(m => m.InformationPageComponent),
+        data: { page: 'shipping-info' }
+      },
+      {
+        path: 'returns-exchanges',
+        loadComponent: () => import('./features/information/information-page.component').then(m => m.InformationPageComponent),
+        data: { page: 'returns-exchanges' }
+      },
+      {
+        path: 'size-guide',
+        loadComponent: () => import('./features/information/information-page.component').then(m => m.InformationPageComponent),
+        data: { page: 'size-guide' }
+      },
+      {
+        path: 'privacy-policy',
+        loadComponent: () => import('./features/information/information-page.component').then(m => m.InformationPageComponent),
+        data: { page: 'privacy-policy' }
+      },
+      {
+        path: 'terms-of-service',
+        loadComponent: () => import('./features/information/information-page.component').then(m => m.InformationPageComponent),
+        data: { page: 'terms-of-service' }
+      },
+      {
+        path: 'cookie-policy',
+        loadComponent: () => import('./features/information/information-page.component').then(m => m.InformationPageComponent),
+        data: { page: 'cookie-policy' }
       }
     ]
   },

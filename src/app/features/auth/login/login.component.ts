@@ -32,7 +32,12 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.authService.login(this.loginForm.value);
-    this.router.navigate(['/']);
+    this.authService.login(this.loginForm.getRawValue()).subscribe({
+      next: () => this.router.navigate(['/']),
+      error: (error) => {
+        this.errorMessage.set(error.error?.message || 'Unable to sign in. Please check your credentials and try again.');
+        this.isLoading.set(false);
+      }
+    });
   }
 }

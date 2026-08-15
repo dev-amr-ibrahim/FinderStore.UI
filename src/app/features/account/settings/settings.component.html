@@ -1,0 +1,18 @@
+<main class="min-h-screen bg-gray-50 pb-16 pt-24 dark:bg-gray-900">
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <div class="mb-8"><p class="text-sm font-medium text-primary-600">Your account</p><h1 class="mt-1 text-3xl font-bold text-gray-900 dark:text-white">Settings</h1><p class="mt-2 text-gray-600 dark:text-gray-400">Control how we contact you and how your account works.</p></div>
+    <div class="grid gap-6 lg:grid-cols-[1fr_280px]">
+      <form [formGroup]="settingsForm" (ngSubmit)="save()" class="space-y-6">
+        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 dark:bg-gray-800 dark:ring-gray-700"><h2 class="text-lg font-semibold text-gray-900 dark:text-white">Notifications</h2><p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Choose only messages that help you manage purchases and deliveries.</p><div class="mt-5 space-y-4">
+          <label class="toggle-row"><input type="checkbox" formControlName="orderUpdates"><span><b>Order updates</b><small>Confirmation, cancellations and refunds</small></span></label>
+          <label class="toggle-row"><input type="checkbox" formControlName="deliveryUpdates"><span><b>Delivery updates</b><small>Shipping and delivery status changes</small></span></label>
+          <label class="toggle-row"><input type="checkbox" formControlName="emailReceipts"><span><b>Email receipts</b><small>Keep a copy of your invoices by email</small></span></label>
+          <label class="toggle-row"><input type="checkbox" formControlName="promotions"><span><b>Offers and promotions</b><small>Optional deals and product launches</small></span></label>
+        </div></section>
+        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 dark:bg-gray-800 dark:ring-gray-700"><h2 class="text-lg font-semibold text-gray-900 dark:text-white">Privacy</h2><label class="toggle-row mt-5"><input type="checkbox" formControlName="personalisedRecommendations"><span><b>Personalised recommendations</b><small>Use browsing and purchase activity to tailor products</small></span></label><p class="mt-4 text-xs leading-5 text-gray-500 dark:text-gray-400">You can change this at any time. Core order and service messages remain enabled to keep your account secure.</p></section>
+        <div class="flex justify-end gap-4"><p class="self-center text-sm text-green-600" [class.invisible]="!saved()">Settings saved on this device.</p><button type="submit" class="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700">Save settings</button></div>
+      </form>
+      <aside class="space-y-4"><section class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100 dark:bg-gray-800 dark:ring-gray-700"><h2 class="font-semibold text-gray-900 dark:text-white">Orders & returns</h2><p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Your completed orders will appear here when order history is connected.</p><a routerLink="/products" class="mt-4 inline-block text-sm font-medium text-primary-600 hover:text-primary-700">Continue shopping →</a></section><section class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100 dark:bg-gray-800 dark:ring-gray-700"><h2 class="font-semibold text-gray-900 dark:text-white">Security</h2><p class="mt-2 text-sm text-gray-500 dark:text-gray-400">For your protection, password and sign-in controls will be available here once the account API supports them.</p></section><a routerLink="/profile" class="block rounded-2xl border border-primary-200 bg-primary-50 p-5 text-sm font-medium text-primary-700 dark:border-primary-900 dark:bg-gray-800 dark:text-primary-300">Update contact details and addresses →</a></aside>
+    </div>
+  </div>
+</main>
