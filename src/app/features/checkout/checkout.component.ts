@@ -391,13 +391,13 @@ export class CheckoutComponent {
     });
 
     // Pre-fill with user data if logged in
-    const user = this.authService.user();
+    const user = this.authService.currentUser();
     if (user) {
       this.shippingForm.patchValue({
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: user.name,
+        lastName: user.name,
         email: user.email,
-        phone: user.phone
+        phone: user.phone || '',
       });
     }
   }

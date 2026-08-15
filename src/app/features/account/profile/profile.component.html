@@ -1,0 +1,36 @@
+<main class="min-h-screen bg-gray-50 pb-16 pt-24 dark:bg-gray-900">
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="text-sm font-medium text-primary-600">Your account</p>
+        <h1 class="mt-1 text-3xl font-bold text-gray-900 dark:text-white">Profile</h1>
+        <p class="mt-2 text-gray-600 dark:text-gray-400">Keep your contact and delivery details ready for a faster checkout.</p>
+      </div>
+      <a routerLink="/settings" class="text-sm font-medium text-primary-600 hover:text-primary-700">Account settings →</a>
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="save()" class="space-y-6">
+      <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 dark:bg-gray-800 dark:ring-gray-700">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Personal details</h2>
+        <div class="mt-5 grid gap-5 sm:grid-cols-2">
+          <label class="block sm:col-span-1"><span class="text-sm font-medium text-gray-700 dark:text-gray-200">Full name <span class="text-red-600">*</span></span><input formControlName="name" autocomplete="name" aria-describedby="name-error" [attr.aria-invalid]="hasError('name', 'required') || hasError('name', 'minlength')" class="mt-1.5 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-gray-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:border-gray-600 dark:bg-gray-900 dark:text-white" />@if (hasError('name', 'required') || hasError('name', 'minlength')) { <p id="name-error" class="mt-1 text-sm text-red-600">Enter your full name (at least 2 characters).</p> }</label>
+          <label class="block sm:col-span-1"><span class="text-sm font-medium text-gray-700 dark:text-gray-200">Email address <span class="text-red-600">*</span></span><input type="email" formControlName="email" autocomplete="email" aria-describedby="email-error" [attr.aria-invalid]="hasError('email', 'required') || hasError('email', 'email')" class="mt-1.5 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-gray-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:border-gray-600 dark:bg-gray-900 dark:text-white" />@if (hasError('email', 'required') || hasError('email', 'email')) { <p id="email-error" class="mt-1 text-sm text-red-600">Enter a valid email address.</p> }</label>
+          <label class="block"><span class="text-sm font-medium text-gray-700 dark:text-gray-200">Primary phone <span class="text-red-600">*</span></span><input type="tel" formControlName="phone1" autocomplete="tel" placeholder="+20 10 0000 0000" aria-describedby="phone-error" [attr.aria-invalid]="hasError('phone1', 'required') || hasError('phone1', 'pattern')" class="mt-1.5 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-gray-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:border-gray-600 dark:bg-gray-900 dark:text-white" />@if (hasError('phone1', 'required') || hasError('phone1', 'pattern')) { <p id="phone-error" class="mt-1 text-sm text-red-600">Enter a valid phone number.</p> }</label>
+          <label class="block"><span class="text-sm font-medium text-gray-700 dark:text-gray-200">Backup phone <span class="font-normal text-gray-500">(optional)</span></span><input type="tel" formControlName="phone2" autocomplete="tel" class="mt-1.5 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-gray-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 dark:border-gray-600 dark:bg-gray-900 dark:text-white" /></label>
+        </div>
+      </section>
+
+      <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 dark:bg-gray-800 dark:ring-gray-700">
+        <div class="flex items-center justify-between gap-4"><div><h2 class="text-lg font-semibold text-gray-900 dark:text-white">Saved addresses</h2><p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Use a clear label so you can choose an address quickly at checkout.</p></div><button type="button" (click)="addAddress()" class="rounded-lg border border-primary-600 px-3 py-2 text-sm font-medium text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-700">Add address</button></div>
+        <div formArrayName="addresses" class="mt-5 space-y-5">
+          @for (address of addresses.controls; track $index; let index = $index) {
+            <fieldset [formGroupName]="index" class="rounded-xl border border-gray-200 p-4 dark:border-gray-700"><div class="mb-4 flex justify-between"><legend class="font-medium text-gray-900 dark:text-white">Address {{ index + 1 }}</legend>@if (addresses.length > 1) { <button type="button" (click)="removeAddress(index)" class="text-sm text-red-600 hover:underline">Remove</button> }</div>
+              <div class="grid gap-4 sm:grid-cols-2"><label><span class="text-xs font-medium text-gray-600 dark:text-gray-300">Label</span><input formControlName="label" placeholder="Home, Work" class="field" /></label><label><span class="text-xs font-medium text-gray-600 dark:text-gray-300">Recipient</span><input formControlName="recipient" autocomplete="shipping name" class="field" /></label><label class="sm:col-span-2"><span class="text-xs font-medium text-gray-600 dark:text-gray-300">Address line 1</span><input formControlName="line1" autocomplete="shipping address-line1" class="field" /></label><label class="sm:col-span-2"><span class="text-xs font-medium text-gray-600 dark:text-gray-300">Address line 2 (optional)</span><input formControlName="line2" autocomplete="shipping address-line2" class="field" /></label><label><span class="text-xs font-medium text-gray-600 dark:text-gray-300">City</span><input formControlName="city" autocomplete="shipping address-level2" class="field" /></label><label><span class="text-xs font-medium text-gray-600 dark:text-gray-300">Region / State</span><input formControlName="region" autocomplete="shipping address-level1" class="field" /></label><label><span class="text-xs font-medium text-gray-600 dark:text-gray-300">Postal code</span><input formControlName="postalCode" autocomplete="shipping postal-code" class="field" /></label><label><span class="text-xs font-medium text-gray-600 dark:text-gray-300">Country</span><input formControlName="country" autocomplete="shipping country-name" class="field" /></label></div>
+            </fieldset>
+          }
+        </div>
+      </section>
+      <div class="flex flex-wrap items-center justify-end gap-4" aria-live="polite"><p class="text-sm text-red-600" [class.invisible]="!submitError()">{{ submitError() || 'No errors' }}</p><p class="text-sm text-green-600" [class.invisible]="!saved()">Profile updated successfully.</p><button type="submit" [disabled]="submitting()" class="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60">{{ submitting() ? 'Saving…' : 'Save profile' }}</button></div>
+    </form>
+  </div>
+</main>
